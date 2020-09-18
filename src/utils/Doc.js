@@ -17,11 +17,8 @@ import { Observable } from 'lib0/observable.js'
 import * as map from 'lib0/map.js'
 
 // @ts-ignore
-function getRandomArbitrary(min, max) {
-  return Math.floor(Math.random() * (max - min) + min);
-}
 export const generateNewClientId = () => {
-  const arr = new Uint32Array(getRandomArbitrary(4, 11))
+  const arr = new Uint32Array(4)
   crypto.getRandomValues(arr)
   return arr[0]
 }

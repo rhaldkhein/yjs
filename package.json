@@ -62,7 +62,7 @@
   },
   "homepage": "https://yjs.dev",
   "dependencies": {
-    "lib0": "github:rhaldkhein/lib0#reactnative"
+    "lib0": "^0.2.33"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^11.1.0",

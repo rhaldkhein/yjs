@@ -18,7 +18,7 @@ import * as map from 'lib0/map.js'
 
 // @ts-ignore
 export const generateNewClientId = () => {
-  const arr = new Uint32Array(4)
+  const arr = new Uint32Array(1)
   crypto.getRandomValues(arr)
   return arr[0]
 }

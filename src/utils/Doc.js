@@ -14,10 +14,17 @@ import {
 } from '../internals.js'
 
 import { Observable } from 'lib0/observable.js'
-import * as random from 'lib0/random.js'
 import * as map from 'lib0/map.js'
 
-export const generateNewClientId = random.uint32
+// @ts-ignore
+function getRandomArbitrary(min, max) {
+  return Math.floor(Math.random() * (max - min) + min);
+}
+export const generateNewClientId = () => {
+  const arr = new Uint32Array(getRandomArbitrary(4, 11))
+  crypto.getRandomValues(arr)
+  return arr[0]
+}
 
 /**
  * A Yjs instance handles the state of shared data.
@@ -29,7 +36,7 @@ export class Doc extends Observable {
    * @param {boolean} [conf.gc] Disable garbage collection (default: gc=true)
    * @param {function(Item):boolean} [conf.gcFilter] Will be called before an Item is garbage collected. Return false to keep the Item.
    */
-  constructor ({ gc = true, gcFilter = () => true } = {}) {
+  constructor({ gc = true, gcFilter = () => true } = {}) {
     super()
     this.gc = gc
     this.gcFilter = gcFilter
@@ -60,7 +67,7 @@ export class Doc extends Observable {
    *
    * @public
    */
-  transact (f, origin = null) {
+  transact(f, origin = null) {
     transact(this, f, origin)
   }
 
@@ -90,7 +97,7 @@ export class Doc extends Observable {
    *
    * @public
    */
-  get (name, TypeConstructor = AbstractType) {
+  get(name, TypeConstructor = AbstractType) {
     const type = map.setIfUndefined(this.share, name, () => {
       // @ts-ignore
       const t = new TypeConstructor()
@@ -131,7 +138,7 @@ export class Doc extends Observable {
    *
    * @public
    */
-  getArray (name = '') {
+  getArray(name = '') {
     // @ts-ignore
     return this.get(name, YArray)
   }
@@ -142,7 +149,7 @@ export class Doc extends Observable {
    *
    * @public
    */
-  getText (name = '') {
+  getText(name = '') {
     // @ts-ignore
     return this.get(name, YText)
   }
@@ -153,7 +160,7 @@ export class Doc extends Observable {
    *
    * @public
    */
-  getMap (name = '') {
+  getMap(name = '') {
     // @ts-ignore
     return this.get(name, YMap)
   }
@@ -164,7 +171,7 @@ export class Doc extends Observable {
    *
    * @public
    */
-  getXmlFragment (name = '') {
+  getXmlFragment(name = '') {
     // @ts-ignore
     return this.get(name, YXmlFragment)
   }
@@ -174,7 +181,7 @@ export class Doc extends Observable {
    *
    * @return {Object<string, any>}
    */
-  toJSON () {
+  toJSON() {
     /**
      * @type {Object<string, any>}
      */
@@ -190,7 +197,7 @@ export class Doc extends Observable {
   /**
    * Emit `destroy` event and unregister all event handlers.
    */
-  destroy () {
+  destroy() {
     this.emit('destroyed', [true])
     super.destroy()
   }
@@ -199,7 +206,7 @@ export class Doc extends Observable {
    * @param {string} eventName
    * @param {function} f
    */
-  on (eventName, f) {
+  on(eventName, f) {
     super.on(eventName, f)
   }
 
@@ -207,7 +214,7 @@ export class Doc extends Observable {
    * @param {string} eventName
    * @param {function} f
    */
-  off (eventName, f) {
+  off(eventName, f) {
     super.off(eventName, f)
   }
 }
